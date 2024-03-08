@@ -1,0 +1,11 @@
+## Random word generator
+
+# import the random library to use the random function
+import random
+
+# List created of many unique four letter words
+four_letter_words = ['menu', 'base', 'corn', 'bats', 'none', 'bake', 'know', 'crap', 'exit', 'leap', 'leak', 'bent', 'cake', 'just', 'both', 'dead', 'coin', 'does', 'dame', 'fool', 'hawk', 'hook', 'chin', 'held', 'five', 'hard', 'leaf', 'jane', 'bone', 'anti', 'dust', 'john', 'cord', 'last', 'boot', 'kent', 'mail', 'lazy', 'life', 'dire', 'head', 'help', 'hour', 'acre', 'hunt', 'Word', 'hair', 'cure', 'boon', 'conn', 'junk', 'brow', 'text', 'meta', 'jazz', 'coca', 'mail', 'cole', 'beck', 'amid', 'fine', 'hell', 'kite', 'aide', 'helm', 'beam', 'lend', 'date', 'this', 'heap', 'lawn', 'late', 'isle', 'four', 'each', 'fail', 'gain', 'gown', 'lead', 'html', 'gall', 'bomb', 'best', 'grey', 'clan', 'cola', 'gave', 'hail', 'site', 'diet', 'baby', 'here', 'holt', 'item', 'duke', 'info', 'buck', 'burn', 'jury', 'icon', 'bulk', 'done', 'flow', 'hope', 'herb', 'draw', 'harm', 'carr', 'back', 'gala', 'atop', 'beer', 'cute', 'hate', 'also', 'feat', 'buzz', 'fuss', 'into', 'curb', 'copy', 'boss', 'gift', 'date', 'duff', 'bear', 'text', 'glue', 'iron', 'dull', 'kent', 'euro', 'evil', 'dash', 'army', 'kiss', 'deaf', 'lack', 'rely', 'have', 'fond', 'cast', 'beth', 'heel', 'fire', 'gate', 'come', 'disk', 'belt', 'drop', 'fort', 'lean', 'java', 'earl', 'gang', 'bach', 'haul', 'foot', 'calf', 'demo', 'fuel', 'jeep', 'jean', 'fell', 'dell', 'dent', 'grip', 'kill', 'felt', 'more', 'note', 'golf', 'high', 'edge', 'disc', 'bowl', 'bend', 'lang', 'fill', 'hide', 'flew', 'been', 'bolt', 'bout', 'cell', 'glen', 'gear', 'lava', 'gaze']
+
+# Function to return a random word from the four_letter_words list when called each time
+def get_word():
+    return (random.choice(four_letter_words))
