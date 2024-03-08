@@ -1,0 +1,140 @@
+## Wordle Game Development
+
+# Import and install required modules and libraries 
+!pip install import-ipynb
+from tkinter import *
+from tkinter import messagebox
+import import_ipynb
+# Import created a module for a large list of 4 letter words 
+import words
+import enum
+
+# Create a tkinter window
+root = Tk()
+
+# Initialise wordle variable to select a word from words module
+wordle = words.get_word()
+
+# Define the colours to be used in the GUI
+green = '#34A853'
+yellow = '#FBBC04'
+white = '#FFFFFF'
+grey = '#9AA0A6'
+black = '#000000'
+
+# Window background configuration
+root.config(bg=black)
+
+# Create and position a entry widget to get the user input for their guess
+user_input = Entry(root)
+user_input.grid(row=100, column=0, padx=10, pady=10, columnspan=10)
+
+# Initialise number of attempts to 0
+attempt = 0
+
+# Function to compare user guess with the wordle
+# Function looks at letter position and letter inclusion in the wordle
+def letter_check(wordle,user_word):
+    
+    # For loop to compare each letter in the user input to the wordle
+    # User word enumerated to convert to user word to indexed list of letters
+    for  index, letter in enumerate(user_word):
+        
+        # Labels are created to format boxes surrounding each letter
+        # Letters are capitalised and set a font size
+        label = Label(root, text=letter.upper(), font=(50))
+        label.grid(row=attempt, column=index, padx=10, pady=10)
+        
+        # Based on wordle rules the users letter box backgrounds are formatted on a colour scale
+        if letter.lower() == wordle[index]: # If user letter in wordle and in the same position set green format
+            label.config(bg=green, fg=white, width=5, height=2) 
+            
+        if letter.lower() in wordle and letter.lower() != wordle[index]: # If user letter in wordle but in different position set yellow format
+            label.config(bg=yellow, fg=white, width=5, height=2)  
+                
+        if letter.lower() not in wordle: # If letter not in wordle set grey format
+            label.config(bg=grey, fg=white, width=5, height=2)
+
+# Function to clear all previous user inputs
+def clear_labels():
+    # For loop clears each label from the GUI window
+    for widget in root.winfo_children(): # For each widget in the root window
+        if isinstance(widget, Label): # If it is a label widget then remove it 
+            widget.destroy()
+
+# Function clear game window and reset wordle and attempts
+def clear_game():
+    global wordle # Globalise wordle to be used outside the function
+    wordle = words.get_word()
+    user_input.delete(0 , END) #Delete old user input
+    clear_labels()
+    global attempt # Globalise user attempts to be used outside the function
+    attempt = 0 # Reset attempt to 0
+
+# Function to replay the game 
+def replay():
+    # Message box prompted to give the user the choice to play again
+    # If response is yes the game is reset with the clear_game() function, otherwise the window is closed
+    response = messagebox.askyesno('Replay', 'Would you like to play again?')
+    if response is True: # If user clicks yes
+        clear_game()
+    elif response is False: # If user clicks no
+        messagebox.showinfo('Thank you','Thank you for playing wordle!')
+        root.destroy()
+
+# Function to provide a prompt that informs the user of the game rules and instructions
+def user_instructions():
+    messagebox.showinfo('Instructions','Welcome to Wordle!\n\nInput\
+ your guess of the four letter wordle and click guess when you are ready.\n\nIf the box is grey the letter is wrong.\nIf the box is green then the\
+ letter is correct and in the right position.\nIf the box is yellow then the letter is correct but in the wrong position.\n\nYou will only have\
+ five chances, so choose wisely.\n\nGood luck!')
+    
+# Function for the main game 
+# Event parameter set default to none to allow enter key bind to call user_guest function
+def user_guess(event=None):
+
+    # Globalise user attempts to be used outside the function
+    global attempt    
+
+    # While loop limits the users attempts to 5
+    while attempt < 5 : 
+
+        # Assign user input to the variable user_word
+        user_word = user_input.get()
+
+        # Logical statements to only accept alphabetical characters with 4 letters
+        if user_word.isalpha() and len(user_word) == 4:
+
+            # Nested ifs to output feedback to the user and control the game flow
+            # The user input is compared with the wordle to provide feedback
+            if wordle == user_word: # If the user guesses correctly output word and congratulate
+                letter_check(wordle,user_word)
+                messagebox.showinfo('Congratulations',f'You have guessed the wordle, well done!')
+                replay()
+                return  
+            else: # If user guesses incorrectly
+                letter_check(wordle, user_word) # letter_check function called to assess and format each user input character
+                attempt += 1
+                # Once the user reaches 5 attempts without guessing correctly they are prompted with a loss
+                if attempt == 5:
+                    messagebox.showerror('You lose', f'You lost, the word was {wordle}')
+                    replay()
+                return    
+        # Warn the user of the invalid input and return to aquire new input
+        else:
+            messagebox.showerror('Input error','Please input a valid 4 letter word')
+            return  
+                   
+# Button created and positioned on root window grid to process users guess upon clicking
+user_input_button = Button(root, text='Guess', command=user_guess)
+user_input_button.grid(row=101, column=0, padx =20, pady=10, columnspan=3)
+
+# Button created and positioned on root window grid to call user_instructions function and display instructions upon clicking
+user_instruction_button = Button(root, text='Instructions', command=user_instructions)
+user_instruction_button.grid(row=100, column=10, padx =10,  columnspan=3)
+
+# Enter key bound to call user_guest function additionally to the 'Guess' button
+user_input.bind("<Return>", user_guess)
+
+# Start the tkinter loop to display the GUI and process interactions
+root.mainloop()
